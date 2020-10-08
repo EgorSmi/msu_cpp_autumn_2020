@@ -20,7 +20,6 @@ int main()
 	a.reset();
 	a.makeAllocator(sizeof(char)*2);
 	mas1 = a.alloc(sizeof(char)*3);
-	fl *= (!mas1);
 	if (fl == 1)
 		cout<<"OK"<<endl;
 	if (fl == 0)
