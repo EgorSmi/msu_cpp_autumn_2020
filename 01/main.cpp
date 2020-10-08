@@ -18,11 +18,13 @@ int main()
 	*mas2 = '2';
 	fl *= (mas1[0] == '1' && mas2[0] == '2');
 	a.reset();
-	a.makeAllocator(sizeof(char)*2);
-	mas1 = a.alloc(sizeof(char)*3);
+	cout << "После reset" <<endl;
 	if (fl == 1)
 		cout<<"OK"<<endl;
 	if (fl == 0)
 		cout<<"Error"<<endl;
+	cout<<"Попросим больше, чем есть"<<endl;
+	a.makeAllocator(sizeof(char)*2);
+	mas1 = a.alloc(sizeof(char)*3);
 	return 0;
 }
