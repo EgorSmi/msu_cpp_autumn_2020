@@ -17,13 +17,16 @@ int main()
 	*mas1 = '1';
 	*mas2 = '2';
 	fl *= (mas1[0] == '1' && mas2[0] == '2');
+	cout << "Изменим значение с 1 на 7" << endl;
+	*mas1 = '7';
+	cout << *mas1 << " \nПолучилось!!" << endl;
 	a.reset();
-	cout << "После reset" <<endl;
+	cout << "После reset:" <<endl;
 	if (fl == 1)
 		cout<<"OK"<<endl;
 	if (fl == 0)
 		cout<<"Error"<<endl;
-	cout<<"Попросим больше, чем есть"<<endl;
+	cout<<"А теперь попросим больше, чем есть у объекта Allocator"<<endl;
 	a.makeAllocator(sizeof(char)*2);
 	mas1 = a.alloc(sizeof(char)*3);
 	return 0;
