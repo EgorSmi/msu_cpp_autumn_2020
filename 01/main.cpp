@@ -8,7 +8,7 @@ using namespace std;
 
 int main()
 {
-    int fl=1;
+    int fl = 1;
 	char *mas1, *mas2;
     Allocator a;
 	a.makeAllocator(sizeof(char)*8);
@@ -20,10 +20,10 @@ int main()
 	a.reset();
 	a.makeAllocator(sizeof(char)*2);
 	mas1 = a.alloc(sizeof(char)*3);
-	fl*=(!mas1);
-	if (fl==1)
+	fl *= (!mas1);
+	if (fl == 1)
 		cout<<"OK"<<endl;
-	if (fl==0)
+	if (fl == 0)
 		cout<<"Error"<<endl;
 	return 0;
 }
