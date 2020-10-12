@@ -1,16 +1,32 @@
-#include <cstdio>
-#include <unistd.h>
-#include <cstddef>
 #include <iostream>
 #include "Allocator.h"
 
 using namespace std;
 
+Allocator::Allocator()
+{
+    start = nullptr;
+    cur = nullptr;
+    Max = 0;
+}
+
 void Allocator::makeAllocator(size_t maxSize)
 {
-    start = new char[maxSize];
-    cur = start;
-    Max = maxSize;
+    if (start)
+    {
+        cout<<"Выполнен delete[] для старых данных"<<endl;
+        delete[] start;
+    }
+    if (maxSize == 0)
+    {
+        cout << "Размер должен быть положительный" << endl;
+    }
+    else
+    {
+        start = new char[maxSize];
+        cur = start;
+        Max = maxSize;
+    }
 }
 
 char* Allocator:: alloc(size_t size)
@@ -29,11 +45,14 @@ char* Allocator:: alloc(size_t size)
 
 void Allocator::reset()
 {
-    cur = 0;
-    Max = 0;
+    cur = start;
 }
 
 Allocator::~Allocator()
 {
-    delete[] start;
+    if (start)
+    {
+        cout<<"Вызов деструктора"<<endl;
+        delete[] start;
+    }
 }
