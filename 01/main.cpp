@@ -7,7 +7,7 @@ int main()
 {
     char *mas1, *mas2, *mas3;
     Allocator a;
-	// Тест 1
+    // Тест 1
     cout<<"Проверка makeAllocator на size = 0"<<endl;
     a.makeAllocator(0);
     // Тест 2
@@ -46,12 +46,12 @@ int main()
     }
     // Тест 7
     cout<<"Вызовем снова makeAllocator"<<endl;
-	a.makeAllocator(sizeof(char)*4);
-	mas1 = a.alloc(sizeof(char)*4);
+    a.makeAllocator(sizeof(char)*4);
+    mas1 = a.alloc(sizeof(char)*4);
     *mas1 = '9';
     cout<<mas1[0]<<endl;
-	mas2 = a.alloc(sizeof(char)*1);
-	if (!mas2)
+    mas2 = a.alloc(sizeof(char)*1);
+    if (!mas2)
     {
         cout<<"Alloc снова вернул nullptr"<<endl;
     }
