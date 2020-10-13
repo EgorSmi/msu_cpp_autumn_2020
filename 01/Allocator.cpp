@@ -14,12 +14,12 @@ void Allocator::makeAllocator(size_t maxSize)
 {
     if (start)
     {
-        cout<<"Выполнен delete[] для старых данных"<<endl;
+        cout<<"Delete[] for old memory"<<endl;
         delete[] start;
     }
     if (maxSize == 0)
     {
-        cout << "Размер должен быть положительный" << endl;
+        cout << "Size must be positive" << endl;
     }
     else
     {
@@ -38,7 +38,7 @@ char* Allocator:: alloc(size_t size)
     }
     else
     {
-        cout<<"Нет места"<<endl;
+        cout<<"Not enough memory for alloc"<<endl;
         return nullptr;
     }
 }
@@ -52,7 +52,6 @@ Allocator::~Allocator()
 {
     if (start)
     {
-        cout<<"Вызов деструктора"<<endl;
         delete[] start;
     }
 }

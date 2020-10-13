@@ -3,6 +3,9 @@ CC=g++
 
 all: prog
 
+test:
+	./prog
+
 prog: main.o allocator.o
 	$(CC) main.o allocator.o -o prog
 allocator.o: Allocator.cpp
