@@ -14,9 +14,11 @@ class TokenParser
         BordHandler CallStart;
         BordHandler CallFinish;
     public:
-        TokenParser();
+        TokenParser(NumHandler CallDigit = nullptr, WordHandler CallWord = nullptr, BordHandler CallStart = nullptr, BordHandler CallFinish = nullptr);
         void SetStartCallback(BordHandler func);
         void SetDigitTokenCallback(NumHandler func);
         void SetWordTokenCallback(WordHandler func);
         void SetFinishCallback(BordHandler func);
+        void ParseText(const char* text);
+        void RegToken(string token);
 };

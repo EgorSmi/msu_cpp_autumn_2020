@@ -3,12 +3,12 @@
 
 using namespace std;
 
-TokenParser::TokenParser()
+TokenParser::TokenParser(NumHandler CallDigit, WordHandler CallWord, BordHandler CallStart, BordHandler CallFinish)
 {
-    CallDigit = nullptr;
-    CallWord = nullptr;
-    CallStart = nullptr;
-    CallFinish = nullptr;
+    this->CallDigit = CallDigit;
+    this->CallFinish = CallFinish;
+    this->CallStart = CallStart;
+    this->CallWord = CallWord;
 }
 
 void TokenParser::SetStartCallback(BordHandler func)
@@ -29,4 +29,52 @@ void TokenParser::SetWordTokenCallback(WordHandler func)
 void TokenParser::SetFinishCallback(BordHandler func)
 {
     CallFinish = func;
+}
+
+void TokenParser::ParseText(const char* text) //разделяет на токены по isspace()
+{
+    string token = "";
+    if (CallStart != nullptr)
+    {
+        CallStart();
+    }
+    else
+    {
+        cout<<"Default Callback function for start is missing"<<endl;
+    }
+    while (*text != '\0')
+    {
+        if (!isspace(*text))
+        {
+            token += *text;
+        }
+        else
+        {
+            if (token != "")
+            {
+                cout<<token<<endl; //проверка для себя
+                RegToken(token);
+                token = "";
+            }
+        }
+        text++;
+    }
+    if (token != "")
+    {
+        cout<<token<<endl; //проверка для себя
+        RegToken(token);
+    }
+    if (CallFinish != nullptr)
+    {
+        CallFinish();
+    }
+    else
+    {
+        cout<<"Default Callback function for finish is missing"<<endl;
+    }
+}
+
+void TokenParser::RegToken(string token) //регистрирует токен
+{
+
 }
