@@ -52,7 +52,6 @@ void TokenParser::ParseText(const char* text) //разделяет на токе
         {
             if (token != "")
             {
-                cout<<token<<endl; //проверка для себя
                 RegToken(token);
                 token = "";
             }
@@ -61,7 +60,6 @@ void TokenParser::ParseText(const char* text) //разделяет на токе
     }
     if (token != "")
     {
-        cout<<token<<endl; //проверка для себя
         RegToken(token);
     }
     if (CallFinish != nullptr)
@@ -76,5 +74,27 @@ void TokenParser::ParseText(const char* text) //разделяет на токе
 
 void TokenParser::RegToken(string token) //регистрирует токен
 {
-
+    bool isNum = true;
+    int i = 0;
+    while ((i<token.length()) && (isNum))
+    {
+        isNum = ((token[i]>='0' && token[i]<='9'));
+        i++;
+    }
+    if ((isNum) && (CallDigit != nullptr))
+    {
+        CallDigit(stoi(token));
+    }
+    if ((CallDigit == nullptr) && (isNum))
+    {
+        cout<<"Default Callback function for digit is missing"<<endl;
+    }
+    if ((!isNum) && (CallWord != nullptr))
+    {
+        CallWord(token);
+    }
+    if ((!isNum) && (CallWord == nullptr))
+    {
+        cout<<"Default Callback function for word is missing"<<endl;
+    }
 }

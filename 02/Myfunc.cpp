@@ -5,7 +5,7 @@ using namespace std;
 
 void OnDigit(int num)
 {
-    cout<<"Num = "<<num<<endl;
+    cout<<"Digit = "<<num<<endl;
 }
 
 void OnWord(string word)
