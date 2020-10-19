@@ -3,22 +3,22 @@
 
 using namespace std;
 
-void OnDigit(int num)
+string OnDigit(int num)
 {
-    cout<<"Digit = "<<num<<endl;
+    return "Digit = " + to_string(num) + "\n";
 }
 
-void OnWord(const string &word)
+string OnWord(const string &word)
 {
-    cout<<"Word = "<<word<<endl;
+    return "Word = " + word + "\n";
 }
 
-void OnStart()
+string OnStart()
 {
-    cout<<"Let's start the parsing"<<endl;
+    return "Let's start the parsing\n";
 }
 
-void OnFinish()
+string OnFinish()
 {
-    cout<<"Parsing is over"<<endl;
+    return "Parsing is over\n";
 }

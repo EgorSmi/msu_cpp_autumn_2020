@@ -26,16 +26,17 @@ void TokenParser::SetFinishCallback(BordHandler func)
     CallFinish = func;
 }
 
-void TokenParser::ParseText(const char* text) // разделяет на токены по isspace()
+string TokenParser::ParseText(const char* text) // разделяет на токены по isspace()
 {
+    string res = "";
     string token = "";
     if (CallStart != nullptr)
     {
-        CallStart();
+        res += CallStart();
     }
     else
     {
-        cout<<"Default Callback function for start is missing"<<endl;
+        res += "Default Callback function for start is missing\n";
     }
     while (*text != '\0')
     {
@@ -47,7 +48,7 @@ void TokenParser::ParseText(const char* text) // разделяет на ток�
         {
             if (token != "")
             {
-                RegToken(token);
+                res += RegToken(token);
                 token = "";
             }
         }
@@ -55,19 +56,20 @@ void TokenParser::ParseText(const char* text) // разделяет на ток�
     }
     if (token != "")
     {
-        RegToken(token);
+        res += RegToken(token);
     }
     if (CallFinish != nullptr)
     {
-        CallFinish();
+        res += CallFinish();
     }
     else
     {
-        cout<<"Default Callback function for finish is missing"<<endl;
+        res += "Default Callback function for finish is missing\n";
     }
+    return res;
 }
 
-void TokenParser::RegToken(const string& token) // регистрирует токен
+string TokenParser::RegToken(const string& token) // регистрирует токен
 {
     bool isNum = true;
     int i = 0;
@@ -78,18 +80,19 @@ void TokenParser::RegToken(const string& token) // регистрирует то
     }
     if ((isNum) && (CallDigit != nullptr))
     {
-        CallDigit(stoi(token));
+        return CallDigit(stoi(token));
     }
     if ((CallDigit == nullptr) && (isNum))
     {
-        cout<<"Default Callback function for digit is missing"<<endl;
+        return "Default Callback function for digit is missing\n";
     }
     if ((!isNum) && (CallWord != nullptr))
     {
-        CallWord(token);
+        return CallWord(token);
     }
     if ((!isNum) && (CallWord == nullptr))
     {
-        cout<<"Default Callback function for word is missing"<<endl;
+        return "Default Callback function for word is missing\n";
     }
+    return "";
 }

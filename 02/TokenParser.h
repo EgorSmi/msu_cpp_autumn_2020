@@ -3,9 +3,9 @@
 
 using namespace std;
 
-using NumHandler = void(*)(int);
-using WordHandler = void(*)(const string&);
-using BordHandler = void(*)();
+using NumHandler = string(*)(int);
+using WordHandler = string(*)(const string&);
+using BordHandler = string(*)();
 
 class TokenParser
 {
@@ -20,6 +20,6 @@ class TokenParser
         void SetDigitTokenCallback(NumHandler func);
         void SetWordTokenCallback(WordHandler func);
         void SetFinishCallback(BordHandler func);
-        void ParseText(const char* text);
-        void RegToken(const string& token);
+        string ParseText(const char* text);
+        string RegToken(const string& token);
 };

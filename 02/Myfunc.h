@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void OnDigit(int num);
-void OnWord(const string &word);
-void OnStart();
-void OnFinish();
+string OnDigit(int num);
+string OnWord(const string &word);
+string OnStart();
+string OnFinish();

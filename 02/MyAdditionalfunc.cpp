@@ -3,22 +3,22 @@
 
 using namespace std;
 
-void AdditionalOnDigit(int num)
+string AdditionalOnDigit(int num)
 {
-    cout<<"Additional digit = "<<num<<endl;
+    return "Additional digit = " + to_string(num) + "\n";
 }
 
-void AdditionalOnWord(const string &word)
+string AdditionalOnWord(const string &word)
 {
-    cout<<"Additional word = "<<word<<endl;
+    return "Additional word = " + word + "\n";
 }
 
-void AdditionalOnStart()
+string AdditionalOnStart()
 {
-    cout<<"Let's start the additional parsing"<<endl;
+    return "Let's start the additional parsing\n";
 }
 
-void AdditionalOnFinish()
+string AdditionalOnFinish()
 {
-    cout<<"Additional parsing is over"<<endl;
+    return "Additional parsing is over\n";
 }
