@@ -4,12 +4,7 @@
 using namespace std;
 
 TokenParser::TokenParser(NumHandler CallDigit, WordHandler CallWord, BordHandler CallStart, BordHandler CallFinish)
-{
-    this->CallDigit = CallDigit;
-    this->CallFinish = CallFinish;
-    this->CallStart = CallStart;
-    this->CallWord = CallWord;
-}
+    : CallDigit(CallDigit),  CallWord(CallWord), CallStart(CallStart), CallFinish(CallFinish) { }
 
 void TokenParser::SetStartCallback(BordHandler func)
 {
@@ -72,7 +67,7 @@ void TokenParser::ParseText(const char* text) // разделяет на ток�
     }
 }
 
-void TokenParser::RegToken(string token) // регистрирует токен
+void TokenParser::RegToken(const string& token) // регистрирует токен
 {
     bool isNum = true;
     int i = 0;

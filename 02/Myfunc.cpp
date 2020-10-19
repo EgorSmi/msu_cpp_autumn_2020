@@ -8,7 +8,7 @@ void OnDigit(int num)
     cout<<"Digit = "<<num<<endl;
 }
 
-void OnWord(string word)
+void OnWord(const string &word)
 {
     cout<<"Word = "<<word<<endl;
 }

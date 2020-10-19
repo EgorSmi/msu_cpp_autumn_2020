@@ -1,9 +1,10 @@
+#include <iostream>
 #pragma once
 
 using namespace std;
 
 using NumHandler = void(*)(int);
-using WordHandler = void(*)(string);
+using WordHandler = void(*)(const string&);
 using BordHandler = void(*)();
 
 class TokenParser
@@ -20,5 +21,5 @@ class TokenParser
         void SetWordTokenCallback(WordHandler func);
         void SetFinishCallback(BordHandler func);
         void ParseText(const char* text);
-        void RegToken(string token);
+        void RegToken(const string& token);
 };

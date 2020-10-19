@@ -8,7 +8,7 @@ void AdditionalOnDigit(int num)
     cout<<"Additional digit = "<<num<<endl;
 }
 
-void AdditionalOnWord(string word)
+void AdditionalOnWord(const string &word)
 {
     cout<<"Additional word = "<<word<<endl;
 }
