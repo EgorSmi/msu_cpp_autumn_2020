@@ -31,7 +31,7 @@ void TokenParser::SetFinishCallback(BordHandler func)
     CallFinish = func;
 }
 
-void TokenParser::ParseText(const char* text) //разделяет на токены по isspace()
+void TokenParser::ParseText(const char* text) // разделяет на токены по isspace()
 {
     string token = "";
     if (CallStart != nullptr)
@@ -72,7 +72,7 @@ void TokenParser::ParseText(const char* text) //разделяет на токе
     }
 }
 
-void TokenParser::RegToken(string token) //регистрирует токен
+void TokenParser::RegToken(string token) // регистрирует токен
 {
     bool isNum = true;
     int i = 0;
