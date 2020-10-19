@@ -7,7 +7,7 @@ test:
 	./prog
 
 prog: main.o TokenParser.o Myfunc.o
-		$(CC) main.o TokenParser.o -o prog
+		$(CC) main.o TokenParser.o Myfunc.o -o prog
 main.o: main.cpp
 		$(CC) $(CFLAGS) main.cpp -o main.o
 TokenParser.o: TokenParser.cpp
