@@ -1,4 +1,5 @@
 #include <iostream>
+#include <functional>
 #include "TokenParser.h"
 
 using namespace std;

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <functional>
 #include "MyAdditionalfunc.h"
 
 using namespace std;

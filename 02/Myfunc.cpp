@@ -1,4 +1,5 @@
 #include <iostream>
+#include <functional>
 #include "Myfunc.h"
 
 using namespace std;
