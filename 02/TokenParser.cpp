@@ -3,33 +3,66 @@
 
 using namespace std;
 
-TokenParser::TokenParser(NumHandler CallDigit, WordHandler CallWord, BordHandler CallStart, BordHandler CallFinish)
+TokenParser::TokenParser(const NumHandler& CallDigit, const WordHandler& CallWord,
+const BordHandler& CallStart, const BordHandler& CallFinish)
     : CallDigit(CallDigit),  CallWord(CallWord), CallStart(CallStart), CallFinish(CallFinish) { }
 
-void TokenParser::SetStartCallback(BordHandler func)
+void TokenParser::SetStartCallback(const BordHandler& func)
 {
     CallStart = func;
 }
 
-void TokenParser::SetDigitTokenCallback(NumHandler func)
+void TokenParser::SetDigitTokenCallback(const NumHandler& func)
 {
     CallDigit = func;
 }
 
-void TokenParser::SetWordTokenCallback(WordHandler func)
+void TokenParser::SetWordTokenCallback(const WordHandler& func)
 {
     CallWord = func;
 }
 
-void TokenParser::SetFinishCallback(BordHandler func)
+void TokenParser::SetFinishCallback(const BordHandler& func)
 {
     CallFinish = func;
 }
 
-string TokenParser::ParseText(const char* text) // разделяет на токены по isspace()
+string TokenParser::RegToken(const string& token) // регистрирует токен
+{
+    if (token != "")
+    {
+        bool isNum = true;
+        int i = 0;
+        while ((i<token.length()) && (isNum))
+        {
+            isNum = isdigit(token[i]);
+            i++;
+        }
+        if ((isNum) && (CallDigit != nullptr))
+        {
+            return CallDigit(stoi(token));
+        }
+        if ((CallDigit == nullptr) && (isNum))
+        {
+            return "Default Callback function for digit is missing\n";
+        }
+        if ((!isNum) && (CallWord != nullptr))
+        {
+            return CallWord(token);
+        }
+        if ((!isNum) && (CallWord == nullptr))
+        {
+            return "Default Callback function for word is missing\n";
+        }
+    }
+    return "";
+}
+
+string TokenParser::ParseText(const string& text) // разделяет на токены по isspace()
 {
     string res = "";
     string token = "";
+    int i = 0;
     if (CallStart != nullptr)
     {
         res += CallStart();
@@ -38,26 +71,20 @@ string TokenParser::ParseText(const char* text) // разделяет на то�
     {
         res += "Default Callback function for start is missing\n";
     }
-    while (*text != '\0')
+    while (i < text.length())
     {
-        if (!isspace(*text))
+        if (!isspace(text[i]))
         {
-            token += *text;
+            token += text[i];
         }
         else
         {
-            if (token != "")
-            {
-                res += RegToken(token);
-                token = "";
-            }
+            res += RegToken(token);
+            token = "";
         }
-        text++;
+        i++;
     }
-    if (token != "")
-    {
-        res += RegToken(token);
-    }
+    res += RegToken(token);
     if (CallFinish != nullptr)
     {
         res += CallFinish();
@@ -67,32 +94,4 @@ string TokenParser::ParseText(const char* text) // разделяет на то�
         res += "Default Callback function for finish is missing\n";
     }
     return res;
-}
-
-string TokenParser::RegToken(const string& token) // регистрирует токен
-{
-    bool isNum = true;
-    int i = 0;
-    while ((i<token.length()) && (isNum))
-    {
-        isNum = ((token[i]>='0' && token[i]<='9'));
-        i++;
-    }
-    if ((isNum) && (CallDigit != nullptr))
-    {
-        return CallDigit(stoi(token));
-    }
-    if ((CallDigit == nullptr) && (isNum))
-    {
-        return "Default Callback function for digit is missing\n";
-    }
-    if ((!isNum) && (CallWord != nullptr))
-    {
-        return CallWord(token);
-    }
-    if ((!isNum) && (CallWord == nullptr))
-    {
-        return "Default Callback function for word is missing\n";
-    }
-    return "";
 }

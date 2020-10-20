@@ -3,9 +3,9 @@
 
 using namespace std;
 
-using NumHandler = string(*)(int);
-using WordHandler = string(*)(const string&);
-using BordHandler = string(*)();
+using NumHandler = function<string (int)>;
+using WordHandler = function<string (const string&)>;
+using BordHandler = function<string ()>;
 
 class TokenParser
 {
@@ -15,11 +15,12 @@ class TokenParser
         BordHandler CallStart;
         BordHandler CallFinish;
     public:
-        TokenParser(NumHandler CallDigit = nullptr, WordHandler CallWord = nullptr, BordHandler CallStart = nullptr, BordHandler CallFinish = nullptr);
-        void SetStartCallback(BordHandler func);
-        void SetDigitTokenCallback(NumHandler func);
-        void SetWordTokenCallback(WordHandler func);
-        void SetFinishCallback(BordHandler func);
-        string ParseText(const char* text);
+        TokenParser(const NumHandler& CallDigit = nullptr, const WordHandler& CallWord = nullptr,
+            const BordHandler& CallStart = nullptr, const BordHandler& CallFinish = nullptr);
+        void SetStartCallback(const BordHandler& func);
+        void SetDigitTokenCallback(const NumHandler& func);
+        void SetWordTokenCallback(const WordHandler& func);
+        void SetFinishCallback(const BordHandler& func);
+        string ParseText(const string& text);
         string RegToken(const string& token);
 };
