@@ -4,6 +4,11 @@
 
 using namespace std;
 
+Matrix::Matrix() : nrows(0), ncols(0)
+{
+    mas = nullptr;
+}
+
 Matrix::Matrix(size_t nrows, size_t ncols) : nrows(nrows), ncols(ncols)
 {
     mas = new int* [nrows];
@@ -13,10 +18,8 @@ Matrix::Matrix(size_t nrows, size_t ncols) : nrows(nrows), ncols(ncols)
     }
 }
 
-Matrix::Matrix(const Matrix& m)
+Matrix::Matrix(const Matrix& m) : nrows(m.GetRows()), ncols(m.GetCols())
 {
-    this->ncols = m.GetCols();
-    this->nrows = m.GetRows();
     mas = new int* [nrows];
     for (size_t i=0; i<nrows; i++)
     {
@@ -30,11 +33,14 @@ Matrix::Matrix(const Matrix& m)
 
 Matrix::~Matrix()
 {
-    for (size_t i=0; i<nrows; i++)
+    if (mas)
     {
-        delete[] mas[i];
+        for (size_t i=0; i<nrows; i++)
+        {
+            delete[] mas[i];
+        }
+        delete[] mas;
     }
-    delete[] mas;
 }
 
 size_t Matrix::GetCols() const
@@ -47,7 +53,7 @@ size_t Matrix::GetRows() const
     return nrows;
 }
 
-Matrix& Matrix::operator*=(int alpha)
+Matrix& Matrix::operator *=(int alpha)
 {
     for (size_t i=0; i<nrows; i++)
     {
@@ -59,7 +65,27 @@ Matrix& Matrix::operator*=(int alpha)
     return *this;
 }
 
-bool Matrix::operator==(const Matrix& m) const
+Matrix Matrix::operator +(const Matrix& m) const
+{
+    if (nrows == m.GetRows() && ncols == m.GetCols())
+    {
+        Matrix res = Matrix(nrows, ncols);
+        for (size_t i=0; i<nrows; i++)
+        {
+            for (size_t j=0; j<ncols; j++)
+            {
+                res.mas[i][j] = mas[i][j] + m.mas[i][j];
+            }
+        }
+        return res;
+    }
+    else
+    {
+        return Matrix();
+    }
+}
+
+bool Matrix::operator ==(const Matrix& m) const
 {
     if (nrows != m.GetRows() || ncols != m.GetCols())
     {
@@ -73,19 +99,32 @@ bool Matrix::operator==(const Matrix& m) const
             flag = (mas[i][j] == m.mas[i][j]);
             if (flag == false)
             {
-                break;
+                return false;
             }
         }
     }
     return flag;
 }
 
-bool Matrix::operator!=(const Matrix& m) const
+bool Matrix::operator !=(const Matrix& m) const
 {
     return !(*this == m);
 }
 
-Vector Matrix::operator[](size_t i) const
+ostream& operator <<(ostream& out, const Matrix& m)
+{
+    for (size_t i=0; i<m.GetRows(); i++)
+    {
+        for (size_t j=0; j<m.GetCols(); j++)
+        {
+            out << m[i][j] << " ";
+        }
+        out<<endl;
+    }
+    return out;
+}
+
+Vector Matrix::operator [](size_t i) const
 {
     if (i < nrows)
     {
@@ -94,16 +133,5 @@ Vector Matrix::operator[](size_t i) const
     else
     {
         throw out_of_range("Index is out of dimension!");
-    }
-}
-
-void Matrix::Read()
-{
-    for (size_t i=0; i<nrows; i++)
-    {
-        for (size_t j=0; j<ncols; j++)
-        {
-            cin>>mas[i][j];
-        }
     }
 }
