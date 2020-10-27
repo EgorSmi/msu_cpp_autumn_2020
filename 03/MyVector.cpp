@@ -3,19 +3,19 @@
 
 using namespace std;
 
-MyVector::MyVector() : n(0)
+MyVector::MyVector() : n(0), real_n(0)
 {
     vect = nullptr;
 }
 
-MyVector::MyVector(size_t n) : n(n)
+MyVector::MyVector(size_t n) : n(n), real_n(2 * n)
 {
-    vect = (int*)malloc(sizeof(int) * n);
+    vect = (int*)malloc(sizeof(int) * real_n);
 }
 
-MyVector::MyVector(const MyVector& v) : n(v.n)
+MyVector::MyVector(const MyVector& v) : n(v.n), real_n(v.real_n)
 {
-    vect = (int*)malloc(sizeof(int) * n);
+    vect = (int*)malloc(sizeof(int) * real_n);
     for (size_t i=0; i<n; i++)
     {
         vect[i] = v.vect[i];
@@ -38,15 +38,19 @@ MyVector& MyVector::operator*=(int alpha)
 
 MyVector& MyVector::operator =(const MyVector& v)
 {
-    if (vect)
+    if (*this != v)
     {
-        free(vect);
-    }
-    n = v.Size();
-    vect = (int*)malloc(sizeof(int) * n);
-    for (size_t i=0; i<n; i++)
-    {
-        vect[i] = v.vect[i];
+        if (vect)
+        {
+            free(vect);
+        }
+        n = v.Size();
+        real_n = v.real_n;
+        vect = (int*)malloc(sizeof(int) * real_n);
+        for (size_t i=0; i<n; i++)
+        {
+            vect[i] = v.vect[i];
+        }
     }
     return *this;
 }
@@ -91,7 +95,19 @@ bool MyVector::operator!=(const MyVector& v) const
     return !(*this == v);
 }
 
-int& MyVector::operator[](size_t i) const
+int& MyVector::operator[](size_t i)
+{
+    if (i < n)
+    {
+        return vect[i];
+    }
+    else
+    {
+        throw out_of_range("Index is out of dimension!");
+    }
+}
+
+const int& MyVector::operator[](size_t i) const
 {
     if (i < n)
     {
@@ -115,14 +131,7 @@ void MyVector::Clear()
 
 bool MyVector::Empty() const
 {
-    if (n == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (n == 0);
 }
 
 void MyVector::Insert(size_t pos, int val)
@@ -136,7 +145,8 @@ void MyVector::Insert(size_t pos, int val)
         }
         free(vect);
         n = n + 1;
-        vect = (int*) malloc(sizeof(int) * n);
+        real_n = n * 2;
+        vect = (int*) malloc(sizeof(int) * real_n);
         for (size_t i=0; i<n; i++)
         {
             if (i > pos)
@@ -164,19 +174,28 @@ void MyVector::Insert(size_t pos, int val)
 
 void MyVector::Push_back(int val)
 {
-    int tmp[n];
-    for (size_t i=0; i<n; i++)
+    if (n == real_n)
     {
-        tmp[i] = vect[i];
+        int tmp[n];
+        for (size_t i=0; i<n; i++)
+        {
+            tmp[i] = vect[i];
+        }
+        free(vect);
+        n = n + 1;
+        real_n *= 2;
+        vect = (int*) malloc(sizeof(int) * real_n);
+        for (size_t i=0; i<n-1; i++)
+        {
+            vect[i] = tmp[i];
+        }
+        vect[n-1] = val;
     }
-    free(vect);
-    n = n + 1;
-    vect = (int*) malloc(sizeof(int) * n);
-    for (size_t i=0; i<n-1; i++)
+    else
     {
-        vect[i] = tmp[i];
+        n = n + 1;
+        vect[n-1] = val;
     }
-    vect[n-1] = val;
 }
 
 void MyVector::Pop_back()
@@ -190,7 +209,8 @@ void MyVector::Pop_back()
         }
         free(vect);
         n = n - 1;
-        vect = (int*) malloc(sizeof(int) * n);
+        real_n = n * 2;
+        vect = (int*) malloc(sizeof(int) * real_n);
         for (size_t i=0; i<n; i++)
         {
             vect[i] = tmp[i];
@@ -207,7 +227,8 @@ void MyVector::Resize(size_t size)
     if (size >= n)
     {
         n = size;
-        vect = (int*) realloc(vect, sizeof(int) * (n+1));
+        real_n = n * 2;
+        vect = (int*) realloc(vect, sizeof(int) * real_n);
     }
     else
     {
@@ -218,7 +239,8 @@ void MyVector::Resize(size_t size)
         }
         free(vect);
         n = size;
-        vect = (int*) malloc(sizeof(int) * n);
+        real_n = n * 2;
+        vect = (int*) malloc(sizeof(int) * real_n);
         for (size_t i=0; i<n; i++)
         {
             vect[i] = tmp[i];
