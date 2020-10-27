@@ -6,13 +6,11 @@ all: prog
 test:
 	./prog
 
-prog: main.o Matrix.o Vector.o
-		$(CC) main.o Matrix.o Vector.o -o prog
-main.o: main.cpp
-		$(CC) $(CFLAGS) main.cpp -o main.o
-Matrix.o: Matrix.cpp
-		$(CC) $(CFLAGS) Matrix.cpp -o Matrix.o
-Vector.o: Vector.cpp
-		$(CC) $(CFLAGS) Vector.cpp -o Vector.o
+prog: mainVector.o MyVector.o
+		$(CC) mainVector.o MyVector.o -o prog
+mainVector.o: mainVector.cpp
+		$(CC) $(CFLAGS) mainVector.cpp -o mainVector.o
+MyVector.o: MyVector.cpp
+		$(CC) $(CFLAGS) MyVector.cpp -o MyVector.o
 clean:
 	rm -rf *.o prog
