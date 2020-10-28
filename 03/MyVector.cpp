@@ -144,7 +144,7 @@ void MyVector::Insert(size_t pos, int val)
             tmp[i] = vect[i];
         }
         free(vect);
-        n = n + 1;
+        n++;
         real_n = n * 2;
         vect = (int*) malloc(sizeof(int) * real_n);
         for (size_t i=0; i<n; i++)
@@ -182,7 +182,7 @@ void MyVector::Push_back(int val)
             tmp[i] = vect[i];
         }
         free(vect);
-        n = n + 1;
+        n++;
         real_n *= 2;
         vect = (int*) malloc(sizeof(int) * real_n);
         for (size_t i=0; i<n-1; i++)
@@ -193,7 +193,7 @@ void MyVector::Push_back(int val)
     }
     else
     {
-        n = n + 1;
+        n++;
         vect[n-1] = val;
     }
 }
@@ -208,7 +208,7 @@ void MyVector::Pop_back()
             tmp[i] = vect[i];
         }
         free(vect);
-        n = n - 1;
+        n--;
         real_n = n * 2;
         vect = (int*) malloc(sizeof(int) * real_n);
         for (size_t i=0; i<n; i++)
