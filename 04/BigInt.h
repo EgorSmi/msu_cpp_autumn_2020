@@ -28,5 +28,6 @@ class BigInt
         BigInt operator+(const BigInt& obj) const;
         BigInt operator-(const BigInt& obj) const;
         BigInt operator*(const BigInt& obj) const;
+        void MakeBeauty();
         ~BigInt();
 };

@@ -3,10 +3,30 @@
 
 using namespace std;
 
+void BigInt::MakeBeauty()
+{
+    //удаляет некрасивые нули в начале числа
+    int nulls = len - 1;
+    while ((number[nulls] == '0') && (nulls > 0))
+    {
+        nulls--;
+    }
+    char* res_num = (char*)malloc(sizeof(char)*(nulls+2));
+    res_num[nulls + 1] ='\0';
+    len = nulls + 1;
+    for (int i = nulls; i>=0; i--)
+    {
+        res_num[i] = number[i];
+    }
+    free(number);
+    number = res_num;
+}
+
 BigInt::BigInt() : sign(false), len(1)
 {
     number = (char*) malloc(sizeof(char) * 2);
     number[0] = '0';
+    number[1] = '\0';
 }
 
 BigInt::BigInt(int num)
@@ -31,23 +51,30 @@ BigInt::BigInt(int num)
     }
     number[len] = num % 10 + '0';
     len++;
+    number[len] = '\0';
 }
 
-BigInt::BigInt(const string& str) : len(str.length())
+BigInt::BigInt(const string& str)
 {
+    int i = 0;
     if (str[0] == '-')
     {
+        len = str.length() - 1;
+        i++;
         sign = true;
     }
     else
     {
+        len = str.length();
         sign = false;
     }
     number = (char*) malloc(sizeof(char) * (len + 1));
-    for (int i = 0; i < str.length(); i++)
+    for (int i = 0; i<len; i++)
     {
         number[i] = str[str.length() - 1 - i];
     }
+    number[len] = '\0';
+    MakeBeauty();
 }
 
 ostream& operator <<(ostream& out, const BigInt& obj)
@@ -77,7 +104,7 @@ BigInt::BigInt(BigInt&& obj) : number(obj.number), sign(obj.sign), len(obj.len)
 {
     obj.number = nullptr;
     obj.sign = false;
-    obj.len = 0; 
+    obj.len = 0;
 }
 
 BigInt& BigInt::operator=(const BigInt& obj)
@@ -90,7 +117,7 @@ BigInt& BigInt::operator=(const BigInt& obj)
         }
         sign = obj.sign;
         len = obj.len;
-        number = (char*) malloc(sizeof(char) * len);
+        number = (char*) malloc(sizeof(char) * (len + 1));
         for (size_t i = 0; i < len; i++)
         {
             number[i] = obj.number[i];
@@ -286,7 +313,7 @@ BigInt BigInt::operator+(const BigInt& obj) const
         max_len = obj.len;
         min_len = len;
     }
-    res.number = (char*)malloc(sizeof(char) * (max_len + 1));
+    res.number = (char*)malloc(sizeof(char) * (max_len + 2));
     int add = 0;
     int i = 0;
     while (i < min_len)
@@ -322,6 +349,7 @@ BigInt BigInt::operator+(const BigInt& obj) const
         res.number[i] = add + '0';
         i++;
     }
+    res.number[i] = '\0';
     res.len = i;
     return res;
 }
@@ -341,6 +369,14 @@ BigInt BigInt::operator-(const BigInt& obj) const
         return obj + tmp;
     }
     BigInt res;
+    BigInt tmp1 = *this;
+    BigInt tmp2 = obj;
+    tmp1.sign = false;
+    tmp2.sign = false; 
+    char* min_num;
+    char* max_num;
+    int max_len;
+    int min_len;
     if (*this >= obj)
     {
         res.sign = false;
@@ -349,8 +385,90 @@ BigInt BigInt::operator-(const BigInt& obj) const
     {
         res.sign = true;
     }
+    if (tmp1 >= tmp2)
+    {
+        max_num = number;
+        min_num = obj.number;
+        max_len = len;
+        min_len = obj.len;
+    }
+    else
+    {
+        max_num = obj.number;
+        min_num = number;
+        max_len = obj.len;
+        min_len = len;
+    }
+    res.number = (char*) malloc(sizeof(char) * (max_len + 2));
+    int i = 0;
+    int deduct = 0;
+    while (i < min_len)
+    {
+        if (max_num[i] - deduct >= min_num[i])
+        {
+            res.number[i] = max_num[i] - deduct - min_num[i] + '0';
+            deduct = 0;
+        }
+        else
+        {
+            res.number[i] = max_num[i] + 10 - deduct - min_num[i] + '0';
+            deduct = 1;
+        }
+        i++;
+    }
+    while (i < max_len)
+    {
+        if (max_num[i] - deduct >= '0')
+        {
+            res.number[i] = max_num[i] - deduct;
+            deduct = 0;
+        }
+        else
+        {
+            res.number[i] = max_num[i] + 10 - deduct;
+            deduct = 1;
+        }
+        i++;
+    }
+    res.number[i] = '\0';
+    res.len = i;
+    res.MakeBeauty();
+    return res;
+}
 
-
+BigInt BigInt::operator*(const BigInt& obj) const
+{
+    BigInt res;
+    int length = len + obj.len + 1;
+    long long mas[length];
+    for (int i=0; i <length; i++)
+    {
+        mas[i] = 0;
+    }
+    for (int i = 0; i < len; i++)
+        for (int j = 0; j < obj.len; j++)
+            mas[i + j] += (number[i] - '0') * (obj.number[j] - '0');
+    res.number = (char*) malloc(sizeof(char) * (length + 1));
+    for (int i = 0; i < length; i++)
+    {
+        mas[i + 1] += int(mas[i]) / 10;
+        mas[i] = int(mas[i]) % 10;
+    }
+    for (int i = 0; i < length; i++)
+    {
+        res.number[i] = mas[i] + '0';
+    }
+    res.number[length] = '\0';
+    if (sign == obj.sign)
+    {
+        res.sign = false;
+    }
+    else
+    {
+        res.sign = true;
+    }
+    res.len = length;
+    res.MakeBeauty();
     return res;
 }
 
