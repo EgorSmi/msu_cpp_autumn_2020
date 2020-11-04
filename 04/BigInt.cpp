@@ -12,7 +12,6 @@ void BigInt::MakeBeauty()
         nulls--;
     }
     char* res_num = (char*)malloc(sizeof(char)*(nulls+2));
-    res_num[nulls + 1] ='\0';
     len = nulls + 1;
     for (int i = nulls; i>=0; i--)
     {
@@ -26,7 +25,6 @@ BigInt::BigInt() : sign(false), len(1)
 {
     number = (char*) malloc(sizeof(char) * 2);
     number[0] = '0';
-    number[1] = '\0';
 }
 
 BigInt::BigInt(int num)
@@ -51,7 +49,6 @@ BigInt::BigInt(int num)
     }
     number[len] = num % 10 + '0';
     len++;
-    number[len] = '\0';
 }
 
 BigInt::BigInt(const string& str)
@@ -73,7 +70,6 @@ BigInt::BigInt(const string& str)
     {
         number[i] = str[str.length() - 1 - i];
     }
-    number[len] = '\0';
     MakeBeauty();
 }
 
@@ -265,14 +261,15 @@ bool BigInt::operator<=(const BigInt& obj) const
     return !(*this>obj);
 }
 
-BigInt& BigInt::operator-()
+BigInt BigInt::operator-()
 {
+    BigInt res = *this;
     if ((len == 0) && (number[0] == '0'))
     {
-        return *this;
+        return BigInt();
     }
-    sign = !sign;
-    return *this;
+    res.sign = !sign;
+    return res;
 }
 
 BigInt BigInt::operator+(const BigInt& obj) const
@@ -349,7 +346,6 @@ BigInt BigInt::operator+(const BigInt& obj) const
         res.number[i] = add + '0';
         i++;
     }
-    res.number[i] = '\0';
     res.len = i;
     return res;
 }
@@ -430,7 +426,6 @@ BigInt BigInt::operator-(const BigInt& obj) const
         }
         i++;
     }
-    res.number[i] = '\0';
     res.len = i;
     res.MakeBeauty();
     return res;
@@ -458,7 +453,6 @@ BigInt BigInt::operator*(const BigInt& obj) const
     {
         res.number[i] = mas[i] + '0';
     }
-    res.number[length] = '\0';
     if (sign == obj.sign)
     {
         res.sign = false;
