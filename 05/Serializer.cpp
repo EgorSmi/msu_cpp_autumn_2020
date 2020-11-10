@@ -46,7 +46,6 @@ Error Deserializer::MyLoad(bool& value)
         value = false;
     else
         return Error::CorruptedArchive;
-    //cout<<value<<endl;
     return Error::NoError;
 }
 
@@ -54,23 +53,20 @@ Error Deserializer::MyLoad(uint64_t& value)
 {
     string text;
     in_ >> text;
-    value = 0;
-    for (size_t i=0; i<text.length(); i++)
+    if (text.length() != 0)
     {
-        if (isdigit(text[i]))
+        value = 0;
+        for (size_t i=0; i<text.length(); i++)
         {
-            value += 10 * value + (text[i] - '0');
-        }
-        else
-        {
-            return Error::CorruptedArchive;
+            if (isdigit(text[i]))
+            {
+                value = 10 * value + (text[i] - '0');
+            }
+            else
+            {
+                return Error::CorruptedArchive;
+            }
         }
     }
-    //cout<<value<<endl;
     return Error::NoError;
-}
-
-ostream& Serializer::Get()
-{
-    return out_;
 }

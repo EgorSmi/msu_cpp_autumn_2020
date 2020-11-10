@@ -49,8 +49,6 @@ class Serializer
 
         Error MySave(bool flag);
         Error MySave(uint64_t value);
-
-        ostream& Get();
 };
 
 class Deserializer
@@ -89,12 +87,7 @@ class Deserializer
         template <class T>
         Error process(T&& value)
         {
-            Error er = MyLoad(value);
-            if (er == Error::CorruptedArchive)
-            {
-                return er;
-            }
-            return er;
+            return MyLoad(value);
         }
 
         Error MyLoad(bool& flag);
