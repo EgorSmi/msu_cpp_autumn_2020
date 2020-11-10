@@ -10,7 +10,7 @@ enum class Error
 
 class Serializer
 {
-    static char Separator;
+    static constexpr char Separator = ' ';
     private:
         ostream& out_;
     public:
@@ -34,17 +34,28 @@ class Serializer
         template <class T, class... ArgsT>
         Error process(T value, ArgsT... args)
         {
-            process(value);
-            process(args...);
+            if (process(value) == Error::CorruptedArchive)
+            {
+                return Error::CorruptedArchive;
+            }
+            return process(args...);
         }
 
         template <class T>
-        Error process(T value);
+        Error process(T value)
+        {
+            return MySave(value);
+        }
+
+        Error MySave(bool flag);
+        Error MySave(uint64_t value);
+
+        ostream& Get();
 };
 
 class Deserializer
 {
-    static char Separator;
+    static constexpr char Separator = ' ';
     private:
         istream& in_;
     public:
@@ -60,18 +71,32 @@ class Deserializer
         }
 
         template <class... ArgsT>
-        Error operator()(ArgsT... args)
+        Error operator()(ArgsT&&... args)
         {
             return process(args...);
         }
 
         template <class T, class... ArgsT>
-        Error process(T value, ArgsT... args)
+        Error process(T&& value, ArgsT&&... args)
         {
-            process(value);
-            process(args...);
+            if (process(value) == Error::CorruptedArchive)
+            {
+                return Error::CorruptedArchive;
+            }
+            return process(args...);
         }
 
         template <class T>
-        Error process(T value);
+        Error process(T&& value)
+        {
+            Error er = MyLoad(value);
+            if (er == Error::CorruptedArchive)
+            {
+                return er;
+            }
+            return er;
+        }
+
+        Error MyLoad(bool& flag);
+        Error MyLoad(uint64_t& value);
 };

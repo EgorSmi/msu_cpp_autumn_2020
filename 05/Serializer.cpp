@@ -1,62 +1,76 @@
 #include <iostream>
-#include <typeinfo>
 #include "Serializer.hpp"
 
 using namespace std;
 
-char Serializer::Separator = ' ';
-char Deserializer::Separator = ' ';
-
-template <class T>
-Error Serializer::process(T value)
+Error Serializer::MySave(bool flag)
 {
-    if (strcmp(typeid(value).name(),"bool") == 0)
+    if (flag == true)
     {
-        std::string text;
-        if (value == true)
-            out_<<"true"<<Separator;
-        else if (value == false)
-            out_<<"false"<<Separator];
-
-        return Error::NoError;
+        out_<<"true"<<Separator;
     }
-    else if (strcmp(typeid(value).name(),"int") == 0)
+    else if (flag == false)
     {
-        if (value == 0)
+        out_<<"false"<<Separator;
+    }
+    return Error::NoError;
+}
+
+
+Error Serializer::MySave(uint64_t value)
+{
+    if (value == 0)
+    {
+        out_<<"0"<<Separator;
+    }
+    else
+    {
+        string text = "";
+        while (value > 0)
         {
-            out_<<"0"<<Separator;
+            text = char(value % 10 + '0') + text;
+            value /= 10;
+        }
+        out_<<text<<Separator;
+    }
+    return Error::NoError;
+}
+
+Error Deserializer::MyLoad(bool& value)
+{
+    string text;
+    in_ >> text;
+    if (text == "true")
+        value = true;
+    else if (text == "false")
+        value = false;
+    else
+        return Error::CorruptedArchive;
+    //cout<<value<<endl;
+    return Error::NoError;
+}
+
+Error Deserializer::MyLoad(uint64_t& value)
+{
+    string text;
+    in_ >> text;
+    value = 0;
+    for (size_t i=0; i<text.length(); i++)
+    {
+        if (isdigit(text[i]))
+        {
+            value += 10 * value + (text[i] - '0');
         }
         else
         {
-            string text = "";
-            bool neg = false;
-            if (value < 0)
-            {
-                neg = true;
-                value *= (-1);
-            }
-            while (value > 0)
-            {
-                text = string(value % 10 + '0') + text;
-                value /= 10;
-            }
-            if (neg == true)
-            {
-                out_<<"-"<<text<<Separator;
-            }
-            else
-            {
-                out_<<text<<Separator;
-            }
+            return Error::CorruptedArchive;
         }
-        return Error::NoError;
     }
-    return Error::CorruptedArchive;
+    //cout<<value<<endl;
+    return Error::NoError;
 }
 
-template <class T>
-Error Deserializer::process(T value)
+ostream& Serializer::Get()
 {
-    std::string text;
-    in_ >> text;
+    return out_;
 }
