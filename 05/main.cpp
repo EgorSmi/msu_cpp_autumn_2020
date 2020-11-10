@@ -81,7 +81,6 @@ void WithoutSerializationTest()
 }
 
 
-
 int main()
 {
     DefaultSerializeTest();

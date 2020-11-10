@@ -19,20 +19,7 @@ Error Serializer::MySave(bool flag)
 
 Error Serializer::MySave(uint64_t value)
 {
-    if (value == 0)
-    {
-        out_<<"0"<<Separator;
-    }
-    else
-    {
-        string text = "";
-        while (value > 0)
-        {
-            text = char(value % 10 + '0') + text;
-            value /= 10;
-        }
-        out_<<text<<Separator;
-    }
+    out_<<value<<Separator;
     return Error::NoError;
 }
 
@@ -53,20 +40,13 @@ Error Deserializer::MyLoad(uint64_t& value)
 {
     string text;
     in_ >> text;
-    if (text.length() != 0)
+    try
     {
-        value = 0;
-        for (size_t i=0; i<text.length(); i++)
-        {
-            if (isdigit(text[i]))
-            {
-                value = 10 * value + (text[i] - '0');
-            }
-            else
-            {
-                return Error::CorruptedArchive;
-            }
-        }
+        value = stoi(text);
+        return Error::NoError;
     }
-    return Error::NoError;
+    catch(const invalid_argument& e)
+    {
+        return Error::CorruptedArchive;
+    }
 }

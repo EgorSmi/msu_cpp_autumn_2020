@@ -1,4 +1,4 @@
-CFLAGS = -std=c++11 -Wall -c -ggdb3
+CFLAGS = -std=c++11 -Wall -Werror -c -ggdb3
 CC=g++
 
 all: prog
