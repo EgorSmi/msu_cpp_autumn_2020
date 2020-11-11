@@ -42,7 +42,7 @@ Error Deserializer::MyLoad(uint64_t& value)
     in_ >> text;
     try
     {
-        value = stoul(text);
+        value = stoull(text);
         return Error::NoError;
     }
     catch(const logic_error& e)
