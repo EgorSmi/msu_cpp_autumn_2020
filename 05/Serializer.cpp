@@ -42,10 +42,10 @@ Error Deserializer::MyLoad(uint64_t& value)
     in_ >> text;
     try
     {
-        value = stoi(text);
+        value = stoul(text);
         return Error::NoError;
     }
-    catch(const invalid_argument& e)
+    catch(const logic_error& e)
     {
         return Error::CorruptedArchive;
     }
