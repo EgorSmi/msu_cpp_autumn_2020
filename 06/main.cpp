@@ -6,7 +6,13 @@ using namespace std;
 
 int main()
 {
-    int a = 9;
-    format("something", a);
+    try
+    {
+        cout<<format("something {0} {1}", 678)<<endl;
+    }
+    catch(const ParseError& er)
+    {
+        cout<<"Error"<<endl;
+    }
     return 0;
 }
