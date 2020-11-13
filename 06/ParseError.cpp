@@ -4,17 +4,17 @@
 
 using namespace std;
 
-void SyntaxError::Message() const noexcept
+string SyntaxError::Message() const noexcept
 {
-    cout<<"Syntax error!"<<endl;
+    return "Syntax error!";
 }
 
-void ArgumentError::Message() const noexcept
+string ArgumentError::Message() const noexcept
 {
-    cout<<"Argument must be positive number!"<<endl;
+    return "Argument must be positive number!";
 }
 
-void LimitError::Message() const noexcept
+string LimitError::Message() const noexcept
 {
-    cout<<"No more arguments"<<endl;
+    return "No more arguments";
 }
