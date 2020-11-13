@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Format.hpp"
 #include "ParseError.hpp"
-#include <typeinfo>
 
 
 using namespace std;
@@ -18,44 +17,36 @@ string Parse(const string& s, const vector<string>& arguments)
     string number = "";
     for (size_t i = 0; i < s.length(); i++)
     {
-    }
-    if (flag != true)
-    {
-        throw SyntaxError();
-    }
-    return res;
-}
-
-
-/*
         if (flag == false)
         {
-            if (s[i] != '}')
+            if (s[i] == '}')
             {
-                // идет считывание числа
-                number += s[i];
-            }
-            else
-            {
-                int i_numb;
-                try
+                flag = true;
+                if (number != "")
                 {
-                    i_numb = stoull(number);
-                    cout<<"Проверка: "<<i_numb<<endl;
-                }
-                catch(const logic_error& e)
-                {
-                    throw ArgumentError();
-                }
-                if (i_numb < arguments.size())
-                {
-                    res += arguments[i_numb];
-                    flag = true;
+                    int i_numb = stoull(number);
+                    if (i_numb < arguments.size())
+                    {
+                        res += arguments[i_numb];
+                        number = "";
+                    }
+                    else
+                    {
+                        throw LimitError();
+                    }
                 }
                 else
                 {
                     throw ArgumentError();
                 }
+            }
+            else if (isdigit(s[i]))
+            {
+                number += s[i];
+            }
+            else
+            {
+                throw ArgumentError();
             }
         }
         else
@@ -79,4 +70,11 @@ string Parse(const string& s, const vector<string>& arguments)
             {
                 res += s[i];
             }
-        }*/
+        }    
+    }
+    if (flag != true)
+    {
+        throw SyntaxError();
+    }
+    return res;
+}
