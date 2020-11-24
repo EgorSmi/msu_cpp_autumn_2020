@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Iterator.hpp"
+#include "Allocator.hpp"
 
 using namespace std;
 

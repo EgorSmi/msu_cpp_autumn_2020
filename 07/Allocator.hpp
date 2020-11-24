@@ -1,3 +1,5 @@
+#pragma once
+
 template<class T>
 class Allocator
 {
@@ -8,14 +10,15 @@ public:
 
     pointer allocate(size_type count)
     {
-        pointer = new T(count);
-        return pointer;
+        pointer ptr = new T(count);
+        return ptr;
     }
+
     void deallocate(pointer ptr)
     {
-        if (pointer)
+        if (ptr)
         {
-            delete pointer();
+            delete ptr;
         }
     }
 };
