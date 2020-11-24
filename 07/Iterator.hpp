@@ -12,67 +12,81 @@ public:
     using Pointer = T*;
     using Reference = T&;
 
+    Iterator(): data(nullptr) {}
+
     Iterator(Pointer data) : data(data) {}
 
-    Iterator(const Iterator& it): data(it.data) {}
-
-    Iterator<T>& operator +=(Distance n)
+    Iterator<T>& operator+=(Distance n)
     {
         data += n;
         return *this;
     }
 
-    Iterator<T>& operator -=(Distance n)
+    Iterator<T>& operator-=(Distance n)
     {
         data -= n;
         return *this;
     }
 
-    Iterator<T>& operator =(const Iterator<T>& it)
-    {
-        data = it.data;
-        return *this;
-    }
-
-    Iterator<T> operator +(Distance n) const
+    Iterator<T> operator+(Distance n) const
     {
         return Iterator(data + n);
     }
 
-    Iterator<T> operator -(Distance n) const
+    Iterator<T> operator-(Distance n) const
     {
         return Iterator(data - n);
     }
 
-    Distance operator -(const Iterator<T> it) const
+    Distance operator-(const Iterator<T> it) const
     {
         return data - it.data;
     }
 
-    Reference operator [](Distance n) const
+    Reference operator[](Distance n) const
     {
         return *(data+n);
     }
 
-    Iterator<T>& operator ++()
+    Iterator<T>& operator++()
     {
         data++;
         return *this;
     }
 
-    Iterator<T>& operator --()
+    Iterator<T>& operator--()
     {
         data--;
         return *this;
     }
 
-    bool operator ==(const Iterator<T>& it) const
+    bool operator==(const Iterator<T>& it) const
     {
         return (*this - it == 0);
     }
 
-    bool operator !=(const Iterator<T>& it) const
+    bool operator!=(const Iterator<T>& it) const
     {
         return (*this - it != 0);
+    }
+
+    bool operator>(const Iterator<T>& it) const
+    {
+        return (*this - it > 0);
+    }
+
+    bool operator<(const Iterator<T>& it) const
+    {
+        return (*this - it < 0);
+    }
+
+    bool operator>=(const Iterator<T>& it) const
+    {
+        return (*this - it >= 0);
+    }
+
+    bool operator<=(const Iterator<T>& it) const
+    {
+        return (*this - it <= 0);
     }
 };

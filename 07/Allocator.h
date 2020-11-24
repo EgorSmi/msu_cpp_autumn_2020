@@ -6,8 +6,16 @@ public:
     using pointer = T*;
     using size_type = size_t;
 
-    pointer allocate(size_type count);
-    void deallocate(pointer ptr, size_type count);
-
-    size_t max_size() const noexcept;
+    pointer allocate(size_type count)
+    {
+        pointer = new T(count);
+        return pointer;
+    }
+    void deallocate(pointer ptr)
+    {
+        if (pointer)
+        {
+            delete pointer();
+        }
+    }
 };
