@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Iterator.hpp"
 #include "Allocator.hpp"
+#include "Vector.hpp"
 
 using namespace std;
 
@@ -79,11 +80,251 @@ void ComparisonsTest()
     }
 }
 
+void DefaultTest()
+{
+    Vector<int> v = Vector<int>(4);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    v[3] = 4;
+    if ((v[0] == 1) && (v[1] == 2) && (v[2] == 3) && (v[3] == 4))
+    {
+        cout<<"OK: Default test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Incorrect vector initialization"<<endl;
+    }
+}
+
+void SizeTest()
+{
+    Vector<int> v = Vector<int>(56);
+    if (v.Size() == 56)
+    {
+        cout<<"OK: Size test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Incorrect size"<<endl;
+    }
+}
+
+void AssignTest()
+{
+    Vector<int> v = Vector<int>(4);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    v[3] = 4;
+    Vector<int> v2 = Vector<int>(9);
+    v2 = v;
+    if ((v2[0] == 1) && (v2[1] == 2) && (v2[2] == 3) && (v2[3] == 4))
+    {
+        cout<<"OK: Assignment test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Incorrect vector assignment"<<endl;
+    }
+}
+
+void EqualTest()
+{
+    Vector<int> v = Vector<int>(4);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    v[3] = 4;
+    Vector<int> v2 = Vector<int>(4);
+    v2[0] = 1;
+    v2[1] = 2;
+    v2[2] = 3;
+    v2[3] = 4;
+    if (v == v2)
+    {
+        cout<<"OK: Equality test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Incorrect equality test"<<endl;
+    }
+}
+
+void InequalTest()
+{
+    Vector<int> v = Vector<int>(4);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    v[3] = 4;
+    Vector<int> v2 = Vector<int>(4);
+    v2[0] = 1;
+    v2[1] = 2;
+    v2[2] = 30;
+    v2[3] = 4;
+    if (v != v2)
+    {
+        cout<<"OK: Inequality test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Incorrect inequality test"<<endl;
+    }
+}
+
+void OutOfDimTest()
+{
+    Vector<int> v = Vector<int>(4);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    v[3] = 4;
+    try
+    {
+        cout<<v[4]<<endl;
+        cout<<"ERROR! Index must be out of dimension"<<endl;
+    }
+    catch(out_of_range)
+    {
+        cout<<"OK: Out of dimension test"<<endl;
+    }
+}
+
+void ClearTest()
+{
+    Vector<int> v = Vector<int>(4);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    v[3] = 4;
+    v.Clear();
+    if (v == Vector<int>())
+    {
+        cout<<"OK: Clear test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Wrong clear"<<endl;
+    }
+}
+
+void EmptyTest()
+{
+    Vector<int> v = Vector<int>(4);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    v[3] = 4;
+    Vector<int> v2 = Vector<int>(2);
+    v2[0] = 1;
+    v2[1] = 2;
+    v2.Clear();
+    if ((v.Empty() == false) && (v2.Empty() == true))
+    {
+        cout<<"OK: Empty test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Empty test"<<endl;
+    }
+}
+
+void PushTest()
+{
+    Vector<int> v = Vector<int>(4);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    v[3] = 4;
+    v.Push_back(5);
+    if ((v[0] == 1) && (v[1] == 2) && (v[2] == 3) && (v[3] == 4) && (v[4] == 5) && (v.Size() == 5))
+    {
+        cout<<"OK: Push back test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Incorrect push back"<<endl;
+    }
+}
+
+void PopTest()
+{
+    Vector<int> v = Vector<int>(4);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    v[3] = 4;
+    v.Pop_back();
+    if ((v[0] == 1) && (v[1] == 2) && (v[2] == 3) && (v.Size() == 3))
+    {
+        cout<<"OK: Pop back test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Incorrect pop back"<<endl;
+    }
+}
+
+void ResizeTest()
+{
+    Vector<int> v = Vector<int>(4);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    v[3] = 4;
+    v.Resize(6);
+    bool flag = (v.Size() == 6);
+    v.Resize(1);
+    flag &= ((v.Size() == 1) && (v[0] == 1));
+    if (flag)
+    {
+        cout<<"OK: Resize test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Incorrect resize"<<endl;
+    } 
+}
+
+void ReserveTest()
+{
+    Vector<int> v = Vector<int>(4);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    v[3] = 4;
+    v.Reserve(6);
+    bool flag = (v.Capacity() == 8);
+    v.Reserve(1);
+    flag &= (v.Capacity() == 8);
+    if (flag)
+    {
+        cout<<"OK: Reserve test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Incorrect reserve"<<endl;
+    } 
+}
+
 int main()
 {
     IteratorTest();
     IterationTest();
     DistanceTest();
     ComparisonsTest();
+    DefaultTest();
+    SizeTest();
+    AssignTest();
+    EqualTest();
+    InequalTest();
+    OutOfDimTest();
+    ClearTest();
+    EmptyTest();
+    PushTest();
+    PopTest();
+    ResizeTest();
+    ReserveTest();
     return 0;
 }

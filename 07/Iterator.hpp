@@ -12,9 +12,14 @@ public:
     using Pointer = T*;
     using Reference = T&;
 
-    Iterator(): data(nullptr) {}
+    explicit Iterator(): data(nullptr) {}
 
-    Iterator(Pointer data) : data(data) {}
+    explicit Iterator(Pointer data) : data(data) {}
+
+    Reference operator*() const
+    {
+        return *data;
+    }
 
     Iterator<T>& operator+=(Distance n)
     {
