@@ -12,10 +12,11 @@ class Vector
 public:
     using size_type = size_t;
     using value_type = T;
+    using rvalue_type = T&&;
     using pointer = T*;
     using reference = T&;
     using const_reference = const T&;
-	using allocator_type = Alloc;
+    using allocator_type = Alloc;
     using iterator = Iterator<T>;
     using reverse_iterator = reverse_iterator<Iterator<T>>;
     using difference = ptrdiff_t;
@@ -115,7 +116,7 @@ public:
         return capacity;
     }
 
-    reference operator[](difference i)
+    reference operator[](size_type i)
     {
         if (i < size)
         {
@@ -127,7 +128,7 @@ public:
         }
     }
 
-    const_reference operator[](difference i) const
+    const_reference operator[](size_type i) const
     {
         if (i < size)
         {
@@ -159,6 +160,18 @@ public:
         if (n > capacity)
         {
             capacity = n;
+            pointer tmp = allocator.allocate(size);
+            for (size_type i=0; i<size; i++)
+            {
+                tmp[i] = data[i];
+            }
+            allocator.deallocate(data);
+            data = allocator.allocate(capacity);
+            for (size_type i=0; i<size; i++)
+            {
+                data[i] = tmp[i];
+            }
+            allocator.deallocate(tmp);
         }
     }
 
@@ -189,11 +202,38 @@ public:
         }
     }
 
+    void Push_back(rvalue_type val)
+    {
+        if (size == capacity)
+        {
+            pointer tmp = allocator.allocate(size);
+            for (size_type i=0; i<size; i++)
+            {
+                tmp[i] = data[i];
+            }
+            allocator.deallocate(data);
+            size++;
+            capacity *= 2;
+            data = allocator.allocate(capacity);
+            for (size_type i=0; i<size-1; i++)
+            {
+                data[i] = tmp[i];
+            }
+            data[size-1] = move(val);
+            allocator.deallocate(tmp);
+        }
+        else
+        {
+            size++;
+            data[size-1] = move(val);
+        }
+    }
+
     void Pop_back()
     {
         if (size > 0)
         {
-            this->Resize(size-1);
+            size--;
         }
         else
         {
@@ -209,20 +249,27 @@ public:
 
     void Resize(size_type n)
     {
-        pointer tmp = allocator.allocate(size);
-        for (size_type i=0; i<size; i++)
+        if (n > size)
         {
-            tmp[i] = data[i];
+            pointer tmp = allocator.allocate(size);
+            for (size_type i=0; i<size; i++)
+            {
+                tmp[i] = data[i];
+            }
+            allocator.deallocate(data);
+            size = n;
+            capacity = size * 2;
+            data = allocator.allocate(capacity);
+            for (size_type i=0; i<size; i++)
+            {
+                data[i] = tmp[i];
+            }
+            allocator.deallocate(tmp);
         }
-        allocator.deallocate(data);
-        size = n;
-        capacity = size * 2;
-        data = allocator.allocate(capacity);
-        for (size_type i=0; i<size; i++)
+        else
         {
-            data[i] = tmp[i];
+            size = n;
         }
-        allocator.deallocate(tmp);
     }
 
     iterator begin() const
