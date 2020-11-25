@@ -38,6 +38,13 @@ public:
         }
     }
 
+    Vector(Vector&& v): size(v.size), capacity(v.capacity), data(v.data)
+    {
+        v.size = 0;
+        v.capacity = 0;
+        v.data = nullptr;
+    }
+
     Vector operator=(const Vector& v)
     {
         if (*this != v)
@@ -53,6 +60,24 @@ public:
             {
                 data[i] = v.data[i];
             }
+        }
+        return *this;
+    }
+
+    Vector operator=(Vector&& v)
+    {
+        if (*this != v)
+        {
+            if (data)
+            {
+                allocator.deallocate(data);
+            }
+            size = v.size;
+            capacity = v.capacity;
+            data = v.data;
+            v.size = 0;
+            v.capacity = 0;
+            v.data = nullptr;
         }
         return *this;
     }
