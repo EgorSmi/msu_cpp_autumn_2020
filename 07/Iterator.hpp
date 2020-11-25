@@ -11,6 +11,7 @@ public:
     using Distance = ptrdiff_t;
     using Pointer = T*;
     using Reference = T&;
+    using Const_reference = const T&;
 
     explicit Iterator(): data(nullptr) {}
 
@@ -48,7 +49,12 @@ public:
         return data - it.data;
     }
 
-    Reference operator[](Distance n) const
+    Reference operator[](Distance n)
+    {
+        return *(data+n);
+    }
+
+    Const_reference operator[](Distance n) const
     {
         return *(data+n);
     }
