@@ -1,10 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include <algorithm>
 #include "Iterator.hpp"
 #include "Allocator.hpp"
-
 using namespace std;
 
 template<class T,
@@ -143,7 +141,7 @@ public:
     {
         if (size == capacity)
         {
-            value_type tmp[size];
+            pointer tmp = allocator.allocate(size);
             for (size_type i=0; i<size; i++)
             {
                 tmp[i] = data[i];
@@ -157,6 +155,7 @@ public:
                 data[i] = tmp[i];
             }
             data[size-1] = val;
+            allocator.deallocate(tmp);
         }
         else
         {
@@ -185,7 +184,7 @@ public:
 
     void Resize(size_type n)
     {
-        value_type tmp[size];
+        pointer tmp = allocator.allocate(size);
         for (size_type i=0; i<size; i++)
         {
             tmp[i] = data[i];
@@ -198,6 +197,7 @@ public:
         {
             data[i] = tmp[i];
         }
+        allocator.deallocate(tmp);
     }
 
     iterator begin() const

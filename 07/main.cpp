@@ -248,6 +248,25 @@ void PushTest()
     }
 }
 
+void EmplaceTest()
+{
+    struct Item
+    {
+        int a, b, c;
+        Item(int a, int b, int c): a(a), b(b), c(c) {}
+    };
+    Vector<Item> v;
+    v.Emplace_back(1, 2, 3);
+    if ((v[0].a == 1) && (v[0].b == 2) && (v[0].c == 3))
+    {
+        cout<<"OK: Emplace back test"<<endl;
+    }
+    else
+    {
+        cout<<"ERROR! Incorrect emplace back"<<endl;
+    }
+}
+
 void PopTest()
 {
     Vector<int> v = Vector<int>(4);
@@ -323,6 +342,7 @@ int main()
     ClearTest();
     EmptyTest();
     PushTest();
+    EmplaceTest();
     PopTest();
     ResizeTest();
     ReserveTest();

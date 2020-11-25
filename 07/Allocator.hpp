@@ -10,7 +10,7 @@ public:
 
     pointer allocate(size_type count)
     {
-        pointer ptr = new T(count);
+        pointer ptr = static_cast<pointer>(::operator new(count));
         return ptr;
     }
 
@@ -18,7 +18,7 @@ public:
     {
         if (ptr)
         {
-            delete ptr;
+            ::operator delete(ptr);
         }
     }
 };
