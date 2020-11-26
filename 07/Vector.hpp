@@ -206,7 +206,7 @@ public:
 
     void Resize(size_type n)
     {
-        if (n > capacity)
+        if (n > size)
         {
             this->Reserve(2 * n);
         }
