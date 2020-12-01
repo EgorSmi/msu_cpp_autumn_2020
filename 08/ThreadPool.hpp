@@ -6,6 +6,7 @@
 #include <condition_variable>
 #include <functional>
 #include <queue>
+#include <atomic>
 
 using namespace std;
 
@@ -15,7 +16,7 @@ class ThreadPool
 {
 private:
     size_t size;
-    bool alive;
+    atomic<bool> alive;
     thread* pool; // наш пул потоков
     mutex m;
     condition_variable ready;
