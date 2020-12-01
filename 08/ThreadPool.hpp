@@ -28,7 +28,16 @@ public:
     template <class Func, class... Args>
     auto exec(Func func, Args... args) -> std::future<decltype(func(args...))>
     {
-        //кладем задачу в очередь
+        packaged_task<decltype(func(args...))> task([](Func func, Args... args)
+        {
+            return func(args...);// связываем функцию с аргументами
+        });
+        {
+            lock_guard<mutex> lock(m);
+            thread_q.push(task);
+        }
+        ready.notify_one(); // будим один поток
+        return task.get_future();
     }
 
     ~ThreadPool();

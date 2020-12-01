@@ -14,7 +14,7 @@ void ThreadPool::work()
     while (alive)
     { // поток работает постоянно, пока он жив
         unique_lock<mutex> lock(m);
-        if (thread_q.empty() == false)
+        if (thread_q.size() != 0)
         {
             // вход в критическую секцию
             lock.lock();
@@ -28,7 +28,6 @@ void ThreadPool::work()
             }
             catch(...)
             {
-                cout<<"Error in the thread "<<this_thread::get_id()<<endl;
                 this_thread::yield(); // отдать квант времени процессору и вернуться к выполнению в следующий раз
             }
         }
