@@ -16,26 +16,37 @@ ThreadPool::ThreadPool(size_t size): size(size)
         auto work = [this]()
         {
             while (true)
-            {
+            { // поток работает постоянно, пока он жив
+                unique_lock<mutex> lock(m);
+                if (thread_q.empty() == false)
                 {
-                    lock_guard<mutex> lock(m);
                     // вход в критическую секцию
-                    if (thread_q.empty() == false)
-                    {
-                        auto func = thread_q.front();
-                        thread_q.pop();
-                        func();
-                    }
-                    else
-                    {
-                        // ждем функцию на выполнение
-                        ready.wait(lock);
-                    }
+                    lock.lock();
+                    auto func = thread_q.front();
+                    thread_q.pop();
+                    lock.unlock();
+                    // выход из критической секции
+                    func(); 
+                }
+                else
+                {
+                    // ждем функцию на выполнение
+                    ready.wait(lock);
                 }
             }
         };
         pool[i] = thread(move(work));
-        pool[i].detach();
     }
 }
 
+
+
+ThreadPool::~ThreadPool()
+{
+    ready.notify_all();
+    for (size_t i=0; i<size; i++)
+    {
+        pool[i].join(); // ждем завершение всех потоков
+    }
+    delete[] pool;
+}
