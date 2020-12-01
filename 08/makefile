@@ -6,7 +6,7 @@ all: prog
 test:
 	./prog
 
-prog: main.o
+prog: main.o ThreadPool.o
 		$(CC) main.o ThreadPool.o -o prog
 main.o: main.cpp
 		$(CC) $(CFLAGS) main.cpp -o main.o

@@ -15,14 +15,12 @@ class ThreadPool
 {
 private:
     size_t size;
-    vector<thread> pool;
+    thread* pool; // наш пул потоков
     mutex m;
     condition_variable ready;
-    queue<Function> thread_q;
-    void work();
+    queue<Function> thread_q; //очередь из функций -- общий ресурс
 public:
     explicit ThreadPool(size_t size);
-
     template <class Func, class... Args>
     auto exec(Func func, Args... args) -> std::future<decltype(func(args...))>
     {

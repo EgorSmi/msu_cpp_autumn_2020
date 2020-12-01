@@ -8,15 +8,34 @@
 
 using namespace std;
 
-void ThreadPool::work()
-{
-    // выполняем функцию? 
-}
-
 ThreadPool::ThreadPool(size_t size): size(size)
 {
+    pool = new thread[size];
     for (size_t i = 0; i < size; i++)
     {
-        pool.push_back(this->work());
+        auto work = [this]()
+        {
+            while (true)
+            {
+                {
+                    lock_guard<mutex> lock(m);
+                    // вход в критическую секцию
+                    if (thread_q.empty() == false)
+                    {
+                        auto func = thread_q.front();
+                        thread_q.pop();
+                        func();
+                    }
+                    else
+                    {
+                        // ждем функцию на выполнение
+                        ready.wait(lock);
+                    }
+                }
+            }
+        };
+        pool[i] = thread(move(work));
+        pool[i].detach();
     }
 }
+
