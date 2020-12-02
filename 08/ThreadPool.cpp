@@ -49,5 +49,8 @@ ThreadPool::~ThreadPool()
     {
         pool[i].join(); // ждем завершение всех потоков
     }
-    delete[] pool;
+    if (pool)
+    {
+        delete[] pool;
+    }
 }

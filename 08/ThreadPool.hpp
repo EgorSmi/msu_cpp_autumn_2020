@@ -31,7 +31,7 @@ public:
     {
         packaged_task<decltype(func(args...))()> task([func, args...]()
         {
-            return func(args...);
+            return func(forward<Args>(args)...);
         });
         auto t = make_shared<packaged_task<decltype(func(args...))()>>(move(task));
         {
