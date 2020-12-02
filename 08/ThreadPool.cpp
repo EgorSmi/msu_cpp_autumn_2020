@@ -13,23 +13,16 @@ void ThreadPool::work()
 {
     while (alive)
     { // поток работает постоянно, пока он жив
-        unique_lock<mutex> lock(m);
+        unique_lock<mutex> lock(m); // уже захватили mutex - еще один lock не нужен
         if (thread_q.size() != 0)
         {
             // вход в критическую секцию
-            lock.lock();
             auto func = thread_q.front();
             thread_q.pop();
             lock.unlock();
             // выход из критической секции
-            try
-            {
-                func(); 
-            }
-            catch(...)
-            {
-                this_thread::yield(); // отдать квант времени процессору и вернуться к выполнению в следующий раз
-            }
+            func(); 
+            // this_thread::yield(); // отдать квант времени процессору и вернуться к выполнению в следующий раз
         }
         else
         {
